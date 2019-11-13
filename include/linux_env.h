@@ -1,3 +1,4 @@
+#pragma once
 #ifndef _LINUX_ENV_H
 #define _LINUX_ENV_H
 

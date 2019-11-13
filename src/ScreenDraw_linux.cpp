@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-#include "ScreenDraw.h"
+#include "ScreenDraw_linux.h"
 #include <cstdio>
 #include <algorithm>
 
@@ -24,7 +24,7 @@ void screenClear(){
 
 void clearRect(int x, int y, int w, int h){
     printf("\033[0m");
-    for(int i = 0; i < h; ++i){ 
+    for(int i = 0; i < h; ++i){
         printf("\033[%d;%dH", y+1+i, 2*(x+1)-1);
         for(int j = 0; j < w; ++j){
             printf("  ");
