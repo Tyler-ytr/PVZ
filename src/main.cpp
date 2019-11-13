@@ -25,6 +25,12 @@ my_sleep(1000);
                // clearRect(i*RectH+1,j*RectW,RectH-2,RectW-2);
             }
         }
+        drawPixel(1,1,RED);
+        drawPixel(1,4,RED);
+        drawPixel(4,4,RED);
+        drawPixel(4,1,RED);
+        drawPixel(1,7,RED);
+        drawPixel(6*6+4,5*6+4,PINK);
         drawPixel(6*RectnumW-1,0,YELLOW);
         drawPixel(6*RectnumW-1,6*RectnumH-1,YELLOW);
         drawPixel(4,4,YELLOW);
