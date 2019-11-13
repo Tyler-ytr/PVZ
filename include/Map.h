@@ -7,8 +7,10 @@
 #include "logic.h"
 #define RectH 6
 #define RectW 6
-#define MAPH 6*(RectH+2)
-#define MAPW 6*(RectW+2)
+#define RectnumW 7
+#define RectnumH 6
+#define MAPH RectH*RectnumH-1
+#define MAPW RectW*RectnumW-1
 
 extern node map[3][7];
 void test();
