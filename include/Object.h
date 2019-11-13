@@ -61,7 +61,8 @@ class plant:public object{
       if(temphp>=0){
         hp=temphp;
       }else{
-          node**tempmap=control->map;
+          node(*tempmap)[7];
+          node (*map)[7];
             tempmap[x][y].plant_state=-1;
       }
 
