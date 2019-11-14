@@ -34,9 +34,9 @@ int Game:: init(){
             drawTextB(18,17,"Start",WHITE,BLACK);
             drawTextB(18,20,"Exit",WHITE,RED);//Exit
         }
-        // printf("\n%d\n", readch());
+
     }
-    close_keyboard();
+   // close_keyboard();
 }
 void  Game::test(){
     int state=init();
@@ -45,4 +45,10 @@ void  Game::test(){
     }else{
         printf("Exit");
     }
+}
+void Game::play(){
+
+;
+
+
 }
