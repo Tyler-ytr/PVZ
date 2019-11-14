@@ -107,3 +107,10 @@ void drawText(int x, int y, string str, int color, int backColor){
     printf(str.c_str());
     printf("\033[0m\n");
 }
+void drawTextB(int x, int y, string str, int color, int backColor){
+    printf("\033[%d;%dH", y+1, 2*x+1);
+    printf("\033[38;5;%dm", color);
+    printf("\033[48;5;%dm", backColor);
+    printf(str.c_str());
+    printf("\033[0m\n");
+}
