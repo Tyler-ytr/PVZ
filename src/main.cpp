@@ -4,43 +4,43 @@
 int main(){
    int t=0;
     screenClear();
-//    while(t<100){
-//my_sleep(1000);
-// // screenClear();
-//     //   int pixel_map[][];
-////    for(int i=0;i<60;i++){
-////        for(int j=0;j<40;j++){
-////            if(j==10||j==21||j==32){
-////            drawPixel(i,j,GREEN);}
-////            else {
-////                drawPixel(i,j,WHITE);
-////            }
-////        }
-////    }
-//      //  drawRect(0,0,5,5,RED);
-//        for(int i=0;i<7;i++){
-//            for(int j=0;j<6;j++){
-//                drawWholeRect(i*RectW,j*RectH,RectW,RectH,WHITE);
-//                drawRect(i*RectW,j*RectH,RectW,RectH,BLUE);
-//               // clearRect(i*RectH+1,j*RectW,RectH-2,RectW-2);
+    while(t<100){
+my_sleep(1000);
+ // screenClear();
+     //   int pixel_map[][];
+//    for(int i=0;i<60;i++){
+//        for(int j=0;j<40;j++){
+//            if(j==10||j==21||j==32){
+//            drawPixel(i,j,GREEN);}
+//            else {
+//                drawPixel(i,j,WHITE);
 //            }
 //        }
-//        drawPixel(MAPW,MAPH,YELLOW);
-//        drawRect(3*RectW,3*RectH,RectW,RectH,BLUE);
-//    //    drawWholeRect(10,10,5,5,BLUE);
-// //   drawLineB(0,1,3,false,RED);
-//       // printf("\033[H");
-//    t++;}
-    init_keyboard();
-    while(1)
-    {   my_sleep(50);
-        kbhit();
-        printf("\n%d\n", readch());
-        long long int tsdsd=getTime();
-    //    printf("\n%d",tsdsd);
-        if(readch()==113)break;
-    }
-    close_keyboard();
+//    }
+      //  drawRect(0,0,5,5,RED);
+        for(int i=0;i<7;i++){
+            for(int j=0;j<6;j++){
+                drawWholeRect(i*RectW,j*RectH,RectW,RectH,WHITE);
+                drawRect(i*RectW,j*RectH,RectW,RectH,BLUE);
+               // clearRect(i*RectH+1,j*RectW,RectH-2,RectW-2);
+            }
+        }
+        drawPixel(MAPW,MAPH,YELLOW);
+        drawRect(3*RectW,3*RectH,RectW,RectH,BLUE);
+    //    drawWholeRect(10,10,5,5,BLUE);
+ //   drawLineB(0,1,3,false,RED);
+       // printf("\033[H");
+    t++;}
+//    init_keyboard();
+//    while(1)
+//    {   my_sleep(50);
+//        kbhit();
+//        printf("\n%d\n", readch());
+//        long long int tsdsd=getTime();
+//    //    printf("\n%d",tsdsd);
+//        if(readch()==113)break;
+//    }
+//    close_keyboard();
 
 //    printf("\033[31mThe color,%s!\033[1m\n","haha");
 //    printf("\033[31mThe color,%s!\033[4m\n","haha");
