@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include "ScreenDraw_linux.h"
 #include "common.h"
+#include "Keyboard.h"
 void my_sleep(int time);
 
 

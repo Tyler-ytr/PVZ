@@ -19,6 +19,12 @@ void drawPixelC(int x, int y, char c1, char c2, int color, int backColor){
 
     printf("\033[%d;%dH\033[38;5;%dm\033[48;5;%dm%c%c\033[0m\n", ty, 2*tx-1, color, backColor, c1, c2);
 }
+void drawPixelB(int x,int y,int color){//Pixel里面的文字闪烁
+    int tx = std::max(x, 0) + 1;
+    int ty = std::max(y, 0) + 1;
+
+    printf("\033[%d;%dH\033[48;5;%dm  \033[5m\n", ty, 2*tx-1, color);
+}
 void screenClear(){
     printf("\033[2J\n");
 }
@@ -46,6 +52,21 @@ void drawLine(int x, int y, int l, bool hori, int color){
     else{
         for(int i = 0; i < l; ++i){
             drawPixel(x, y+i, color);
+        }
+    }
+}
+void drawLineB(int x, int y, int l, bool hori, int color){//线里面的文字闪烁
+    if(hori){
+        printf("\033[%d;%dH", y+1, 2*(x+1)-1);
+        printf("\033[48;5;%dm", color);
+        for(int i = 0; i < l; ++i){
+            printf("  ");
+        }
+        printf("\033[5m\n");
+    }
+    else{
+        for(int i = 0; i < l; ++i){
+            drawPixelB(x, y+i, color);
         }
     }
 }
