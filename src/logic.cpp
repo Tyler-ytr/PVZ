@@ -5,5 +5,7 @@
 node smallmap[3][7];
 node bigmap[3][7];
 int sun=0;
+int t=0;
+int score=0;
 
 

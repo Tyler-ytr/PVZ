@@ -85,6 +85,14 @@ int main(){
 //    t++;}
 Game test1;
 test1.test();
-
+//int j=0;
+//screenClear();
+//for(int i=0;i<256;i++){
+//
+//    drawText(0,j,"colortest",i,WHITE);printf("                 %d",i+1);
+//    j++;
+//}
+//screenClear();
+//drawdefence(0,0,10,WHITE);
   return 0;
 }

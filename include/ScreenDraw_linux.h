@@ -3,7 +3,7 @@
 
 #define BLACK         	0
 #define RED           	9
-#define GREEN         	34
+#define GREEN         	28
 #define YELLOW 			178
 #define BLUE 			25
 #define PURPLE 			55
@@ -19,6 +19,8 @@
 #define SQUASHGREEN     76
 #define PINK            165
 #define DARKRED         88
+#define shopcolor       12
+#define grasscolor      42
 
 using namespace std;
 
@@ -34,7 +36,8 @@ void drawWholeRect(int x, int y, int w, int h, int color);
 void drawText(int x, int y, string str, int color, int backColor);
 void drawLineB(int x, int y, int l, bool hori, int color);
 void drawTextB(int x, int y, string str, int color, int backColor);
-//
+void drawdefence(int x,int y,int l,int color,int backColor);
+void drawdefence2(int x,int y,int l,int color,int backColor);
 //for(int i=0;i<RectnumW;i++){
 //for(int j=0;j<RectnumH;j++){
 //drawWholeRect(i*RectW,j*RectH,RectW,RectH,WHITE);

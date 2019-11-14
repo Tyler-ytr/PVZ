@@ -4,17 +4,20 @@
 
 #ifndef PVZ_GAME_H
 #define PVZ_GAME_H
+#include"logic.h"
 class Game{
 private:
     int button;
+    int result;//记录分数
 
 public:
     Game(){
         button=0;
+        result=0;
     }
     int init();//初始化屏幕 有Start Exit 按enter键w s上下移动 enter键选择
     //可能还可以做一个选关界面
-    void play();//游戏开始！1
+    int play();//游戏开始！1. 初始化地图  //返回的值 0 脑子没了 1 存活
     void test();
 
 

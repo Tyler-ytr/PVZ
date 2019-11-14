@@ -20,6 +20,8 @@ typedef struct Node{
 extern node smallmap[3][7];//暴露给大家的全局map;
 extern node bigmap[3][7];//暴露给大家的全局map;
 extern int sun;//全局的阳光
+extern int t;//全局的时间片
+extern int score;
 
 
 
