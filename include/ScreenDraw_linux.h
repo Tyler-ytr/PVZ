@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-
+#include "Map.h"
 #define BLACK         	0
 #define RED           	9
 #define GREEN         	28
@@ -20,7 +20,12 @@
 #define PINK            165
 #define DARKRED         88
 #define shopcolor       12
-#define grasscolor      42
+#define grasscolor      72
+//#define grasscolor      42
+//#define grasscolor      245
+#define coldblue        75
+#define plantcolor      28
+#define zombiecolor     106
 
 using namespace std;
 

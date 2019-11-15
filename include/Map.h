@@ -5,8 +5,8 @@
 #ifndef PVZ_MAP_H
 #define PVZ_MAP_H
 #include "logic.h"
-#define RectH 6
-#define RectW 6
+#define RectH 8
+#define RectW 8
 #define RectnumW 7
 #define RectnumH 6
 #define MAPH RectH*RectnumH-1//最下面的那个点

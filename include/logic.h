@@ -5,6 +5,8 @@
 #ifndef PVZ_LOGIC_H
 #define PVZ_LOGIC_H
 #include <string>
+#include "Map.h"
+#include "linux_env.h"
 extern int sun;//全局的阳光
 extern int t;//全局的时间片
 extern int score;
@@ -21,6 +23,7 @@ public:
     controller();
     void time_passing();
     void add_score(int s);
+    void information_draw();
 
 
 };
@@ -37,6 +40,11 @@ private:
     int ID;
 
 public:
+    int bx;
+    int by;
+    plant(){
+        ;
+    }
     plant(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID);
     virtual void work(class zombie Z);
     virtual void draw();
@@ -62,6 +70,7 @@ private:
 public:
 
     zombie(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID);
+ void  draw();
 
 
 

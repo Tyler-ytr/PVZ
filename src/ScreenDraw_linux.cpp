@@ -133,7 +133,7 @@ void drawdefence2(int x,int y,int l,int color,int backColor){
         printf("\033[48;5;%dm", backColor);
         printf("|");
         printf("\033[0m\n");
-        printf("\033[%d;%dH", y+i+1, 2*(x+6));
+        printf("\033[%d;%dH", y+i+1, 2*(x+RectH));
         printf("\033[38;5;%dm", color);
         printf("\033[48;5;%dm", backColor);
         printf("|");
