@@ -39,6 +39,16 @@ private:
 public:
     plant(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID);
     virtual void work(class zombie Z);
+    virtual void draw();
+};
+class peashooter : public plant{
+//Hp: 100
+//Speed: 5 (5个时间片行动一次)
+//name: peashooter
+
+public:
+    peashooter(int X, int Y, int Type, int ID);
+
 };
 class zombie{
 private:
@@ -50,7 +60,7 @@ private:
     int type;
     int ID;
 public:
-    int temp;
+
     zombie(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID);
 
 

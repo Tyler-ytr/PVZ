@@ -36,6 +36,9 @@ void plant::work(class zombie Z) {
     printf("OKOKOKOKOKOKOK!!!");
     ;
 }
+void plant::draw(){
+    ;
+}
 
 
 zombie:: zombie(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID){
@@ -44,3 +47,7 @@ zombie:: zombie(int X, int Y, int Hp, std::string Name,int speed, int Type, int 
 
        ;
    }
+peashooter::peashooter(int X, int Y, int Type, int ID):plant(X,Y,100,"peashooter",5,Type,ID){
+    ;
+
+};
