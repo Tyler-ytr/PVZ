@@ -137,7 +137,7 @@ int Game::play() {
             ;drawRect(bx*RectW,by*RectH,RectW,RectH,grasscolor);
         }
         c1.time_passing();
-
+        
 
 
 

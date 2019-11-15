@@ -24,11 +24,10 @@ public:
 
 
 };
-
+//extern class plant;
+//extern class zombie;
 class plant{
 private:
- //   plant(int X, int Y, int Hp, std::string Name, int speed, int Type, int ID);
-
     int x;
     int y;
     int hp;
@@ -39,7 +38,23 @@ private:
 
 public:
     plant(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID);
-    virtual void work();
+    virtual void work(class zombie Z);
+};
+class zombie{
+private:
+    int x;
+    int y;
+    int hp;
+    std::string name;
+    int speed;
+    int type;
+    int ID;
+public:
+    int temp;
+    zombie(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID);
+
+
+
 };
 
 

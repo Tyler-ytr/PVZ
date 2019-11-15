@@ -32,6 +32,15 @@ plant::plant(int X, int Y, int Hp, std::string Name, int speed, int Type, int ID
     this->ID = ID;
     this->speed=speed;
 }
-void plant::work() {
+void plant::work(class zombie Z) {
+    printf("OKOKOKOKOKOKOK!!!");
     ;
 }
+
+
+zombie:: zombie(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID){
+
+
+
+       ;
+   }
