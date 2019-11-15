@@ -48,6 +48,7 @@ public:
     plant(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID);
     virtual void work(class zombie Z);
     virtual void draw();
+    void plant_show();
 };
 class peashooter : public plant{
 //Hp: 100

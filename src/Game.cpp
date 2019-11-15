@@ -119,7 +119,7 @@ int Game::play() {
 //    drawLine(2, RectH+5, 3, true, RED);
 //    drawLine(2, RectH+6, 3, true, RED);
     //drawText(3, RectH+6,"HP:100", RED, GRAY );
-    temp.draw();
+    temp.plant_show();
     init_keyboard();
     while (1) {
 //a: 97  d:100;
@@ -157,11 +157,6 @@ int Game::play() {
             ;drawRect(bx*RectW,by*RectH,RectW,RectH,grasscolor);
         }
         c1.time_passing();
-
-
-
-        
-
 
 
 

@@ -40,9 +40,17 @@ plant::plant(int X, int Y, int Hp, std::string Name, int speed, int Type, int ID
 }
 void plant::work(class zombie Z) {
     printf("OKOKOKOKOKOKOK!!!");
+
     ;
 }
 void plant::draw(){
+//waiting for changing;
+;
+
+
+
+}
+void plant::plant_show(){
     //豌豆射手:
 //    ;for(int i=0;i<5;i++){
 //        for(int j=0;j<5;j++){
@@ -53,10 +61,10 @@ void plant::draw(){
 //        }
 //    }
 
-            drawText(2*RectW+2, 1*RectH+3,"豌豆射手", BLACK, plantcolor);
-            drawPixel(2*RectW+2, 1*RectH+4 ,plantcolor);
-            drawPixel(2*RectW+2, 1*RectH+5 ,plantcolor);
-            drawText(2*RectW+1, 1*RectH+6,"HP:100", RED, plantcolor);
+    drawText(2*RectW+2, 1*RectH+3,"豌豆射手", BLACK, plantcolor);
+    drawPixel(2*RectW+2, 1*RectH+4 ,plantcolor);
+    drawPixel(2*RectW+2, 1*RectH+5 ,plantcolor);
+    drawText(2*RectW+1, 1*RectH+6,"HP:100", RED, plantcolor);
 //寒冰射手
     drawText(0*RectW+2, 1*RectH+3,"寒冰射手", BLACK, coldblue);
     drawPixel(0*RectW+2, 1*RectH+4 ,coldblue);
@@ -91,6 +99,7 @@ zombie:: zombie(int X, int Y, int Hp, std::string Name,int speed, int Type, int 
    }
 
 void zombie::draw(){
+    //普通僵尸：
 //    drawPixel(4, RectH+2 ,zombiecolor);
 //    drawText(2, RectH+3,"普通僵尸", BLACK, zombiecolor);
 //    drawPixel(4, RectH+4 ,RED);
