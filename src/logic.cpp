@@ -22,7 +22,7 @@ void controller::add_score(int s) {
     score += s;
 }
 void controller::information_draw(){
-
+;
 }
 
 
@@ -34,11 +34,13 @@ plant::plant(int X, int Y, int Hp, std::string Name, int speed, int Type, int ID
     type = Type;
     this->ID = ID;
     this->speed=speed;
+    Ready=0;
     //waiting for changing
     bx=x;
     by=y;//
+
 }
-void plant::work(class zombie Z) {
+void plant::work(class zombie &Z) {
     printf("OKOKOKOKOKOKOK!!!");
 
     ;
@@ -89,11 +91,32 @@ void plant::plant_show(){
 
 
 }
+void plant:: hurt(int attcak_power){
+    this->hp-=attcak_power;
+    if(hp<=0){
+        alive=0;
+    }
+}
 
+////
+////
+////
+////下面是peashooter
+peashooter::peashooter(int X, int Y, int ID):plant(X,Y,100,"peashooter",5,peashotter,ID){
+    ;
+
+};
+
+
+
+////
+////
+////
+////下面是zombie
 
 zombie:: zombie(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID){
 
-
+        alive=1;
 
        ;
    }
@@ -106,7 +129,27 @@ void zombie::draw(){
 //    drawPixel(4, RectH+5 ,GRAY );
 //    drawText(3, RectH+6,"HP:100", RED, GRAY );
 }
-peashooter::peashooter(int X, int Y, int Type, int ID):plant(X,Y,100,"peashooter",5,Type,ID){
-    ;
+void zombie:: hurt(int attcak_power){
+    this->hp-=attcak_power;
+    if(hp<=0){
+        alive=0;
+    }
+}
 
-};
+
+
+////
+////
+////
+////下面是pea-bullet
+pea_bullet:: pea_bullet(int bx,int by,int frozen,int speed,int attack_power){
+    this->bx=bx;
+    this->by=by;
+    this->frozen=frozen;
+    this->speed=speed;
+    this->attack_power=attack_power;
+}
+void pea_bullet::work(class zombie&Z){
+;
+}
+

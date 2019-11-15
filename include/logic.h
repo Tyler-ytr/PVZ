@@ -10,6 +10,14 @@
 extern int sun;//全局的阳光
 extern int t;//全局的时间片
 extern int score;
+enum Plant_type{
+    peashotter=0,
+    sunflower=1,
+};
+enum Zombie_type{
+    norma_zombie=0,
+};
+
 
 
 
@@ -29,6 +37,19 @@ public:
 };
 //extern class plant;
 //extern class zombie;
+class pea_bullet{
+private:
+    int frozen;//正常是0 冰冻为1
+    int bx;// 像素位置
+    int by;
+    int speed;
+    int attack_power;
+public:
+    pea_bullet(int bx,int by,int frozen,int speed,int attack_power);
+    void work(class zombie&Z);
+
+
+};
 class plant{
 private:
     int x;
@@ -40,14 +61,17 @@ private:
     int ID;
 
 public:
-    int bx;
+    int bx;//像素级别的位置
     int by;
-    plant(){
+    int Ready;//0:waiting 1:ready
+    int alive;//活着为1,死了为0;
+    plant() {
         ;
     }
     plant(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID);
-    virtual void work(class zombie Z);
+    virtual void work(class zombie &Z);
     virtual void draw();
+    void hurt(int attcak_power);
     void plant_show();
 };
 class peashooter : public plant{
@@ -56,7 +80,7 @@ class peashooter : public plant{
 //name: peashooter
 
 public:
-    peashooter(int X, int Y, int Type, int ID);
+    peashooter(int X, int Y, int ID);
 
 };
 class zombie{
@@ -68,10 +92,12 @@ private:
     int speed;
     int type;
     int ID;
+    int alive;
 public:
 
     zombie(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID);
  void  draw();
+    void hurt(int attcak_power);
 
 
 
