@@ -70,8 +70,9 @@ int Game::play() {
     int x = 0;
     int y = 0;//存储坐标系
     int stop=0;
-    t=0;sun=0;
-    score=0;
+//    t=0;sun=0;
+//    score=0;
+    controller c1;
 
     for (int i = 0; i < RectnumW; i++) {
         for (int j = 0; j < 1; j++) {
@@ -135,6 +136,7 @@ int Game::play() {
         }else{
             ;drawRect(bx*RectW,by*RectH,RectW,RectH,grasscolor);
         }
+        c1.time_passing();
 
 
 

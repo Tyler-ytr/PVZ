@@ -14,6 +14,6 @@
 //每一个格子可以绘制的范围是 (x*6+1,y*6+1)---(x*6+4,y*6+4)
 //花园的范围是 从 (0,1)-(6,5)
 
-extern node map[3][7];
+//extern node map[3][7];
 void test();
 #endif //PVZ_MAP_H
