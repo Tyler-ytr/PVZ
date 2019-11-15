@@ -5,6 +5,7 @@
 #ifndef PVZ_LOGIC_H
 #define PVZ_LOGIC_H
 #include <string>
+#include <vector>
 #include "Map.h"
 #include "linux_env.h"
 extern int sun;//全局的阳光
@@ -26,12 +27,16 @@ private:
     int sun;
     int t;
     int score;
+
 public:
     //int score;
+    std::vector<class zombie> zombie_group;
+    std::vector<class plant> plant_group;
     controller();
     void time_passing();
     void add_score(int s);
     void information_draw();
+
 
 
 };
@@ -44,9 +49,19 @@ private:
     int by;
     int speed;
     int attack_power;
+    int alive;//打了没
+    int t;
+
+
 public:
     pea_bullet(int bx,int by,int frozen,int speed,int attack_power);
-    void work(class zombie&Z);
+
+    void move();
+    void work(class zombie &Z);
+    void timepassing(){
+        t+=1;
+    }
+    virtual void draw();
 
 
 };
@@ -69,7 +84,7 @@ public:
         ;
     }
     plant(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID);
-    virtual void work(class zombie &Z);
+    virtual int work(class zombie &Z);
     virtual void draw();
     void hurt(int attcak_power);
     void plant_show();
@@ -93,12 +108,19 @@ private:
     int type;
     int ID;
     int alive;
+    int t;
 public:
-
+    int bx;
+    int by;
     zombie(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID);
- void  draw();
-    void hurt(int attcak_power);
-
+    void  draw();
+    void check_alive_draw();
+    void hurt(int attack_power);
+    void move();
+    virtual int work();
+    void timepassing(){
+        t+=1;
+    }
 
 
 };

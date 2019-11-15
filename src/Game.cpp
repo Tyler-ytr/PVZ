@@ -73,7 +73,9 @@ int Game::play() {
 //    t=0;sun=0;
 //    score=0;
     controller c1;
-    plant temp;
+  //  plant temp;
+    zombie temp1(7,2,100,"Normal_zombie",5,1,1);
+    pea_bullet temp2(0,RectH + 3,0,3,500);
 
     for (int i = 0; i < RectnumW; i++) {
         for (int j = 0; j < 1; j++) {
@@ -85,7 +87,7 @@ int Game::play() {
     for (int i = 0; i < RectnumW; i++) {
         for (int j = 1; j < RectnumH; j++) {
             drawWholeRect(i * RectW, j * RectH, RectW, RectH, grasscolor);
-               drawRect(i*RectW,j*RectH,RectW,RectH,LIGHTGRAY);
+          //     drawRect(i*RectW,j*RectH,RectW,RectH,LIGHTGRAY);
             // clearRect(i*RectH+1,j*RectW,RectH-2,RectW-2);
         }
     }
@@ -119,46 +121,53 @@ int Game::play() {
 //    drawLine(2, RectH+5, 3, true, RED);
 //    drawLine(2, RectH+6, 3, true, RED);
     //drawText(3, RectH+6,"HP:100", RED, GRAY );
-    temp.plant_show();
+  //  temp.plant_show();
     init_keyboard();
+   // kbhit();
     while (1) {
 //a: 97  d:100;
 //w:119 s:115
         my_sleep(50);
-        kbhit();
-        switch (readch()) {
-            case 119://w
-                if (y - 1 >= 0)y = y - 1;
-                break;
-            case 115://s
-                if (y + 1 < RectnumH)y = y + 1;
-                break;
-            case 97://a
-                if (x - 1 >= 0)x = x - 1;
-                break;
-            case 100://d
-                if (x + 1 < RectnumW)x = x + 1;
-                break;
-            case 27:stop=1;break;//结束游戏
-            default:
-                break;
-        }
-        if(check_shop(x,y)){
-            drawRect(x*RectW,y*RectH,RectW,RectH,LIGHTGRAY);
-            drawdefence2(x*RectW,y*RectH,RectH,WHITE,LIGHTGRAY);
-        }else{
-            ;drawRect(x*RectW,y*RectH,RectW,RectH,LIGHTGRAY);
-        }
 
-        if(check_shop(bx,by)){
-            drawRect(bx*RectW,by*RectH,RectW,RectH,shopcolor);
-            drawdefence2(bx*RectW,by*RectH,RectH,WHITE,shopcolor);
-        }else{
-            ;drawRect(bx*RectW,by*RectH,RectW,RectH,grasscolor);
-        }
         c1.time_passing();
+        temp1.timepassing();
+        temp1.draw();
+        temp1.move();
+        temp2.timepassing();
+        temp2.move();
+        temp2.draw();
 
+        if(kbhit()){;
+            switch (readch()) {
+                case 119://w
+                    if (y - 1 >= 0)y = y - 1;
+                    break;
+                case 115://s
+                    if (y + 1 < RectnumH)y = y + 1;
+                    break;
+                case 97://a
+                    if (x - 1 >= 0)x = x - 1;
+                    break;
+                case 100://d
+                    if (x + 1 < RectnumW)x = x + 1;
+                    break;
+                case 27:stop=1;break;//结束游戏
+                default:
+                    break;
+            }
+            if(check_shop(x,y)){
+                drawRect(x*RectW,y*RectH,RectW,RectH,LIGHTGRAY);
+                drawdefence2(x*RectW,y*RectH,RectH,WHITE,LIGHTGRAY);
+            }else{
+                ;drawRect(x*RectW,y*RectH,RectW,RectH,LIGHTGRAY);
+            }
 
+            if(check_shop(bx,by)){
+                drawRect(bx*RectW,by*RectH,RectW,RectH,shopcolor);
+                drawdefence2(bx*RectW,by*RectH,RectH,WHITE,shopcolor);
+            }else{
+                ;drawRect(bx*RectW,by*RectH,RectW,RectH,grasscolor);
+            }}
 
 
         bx=x;

@@ -43,6 +43,7 @@ void drawLineB(int x, int y, int l, bool hori, int color);
 void drawTextB(int x, int y, string str, int color, int backColor);
 void drawdefence(int x,int y,int l,int color,int backColor);
 void drawdefence2(int x,int y,int l,int color,int backColor);
+void drawText_num(int x, int y, string str,int num,int color, int backColor);
 //for(int i=0;i<RectnumW;i++){
 //for(int j=0;j<RectnumH;j++){
 //drawWholeRect(i*RectW,j*RectH,RectW,RectH,WHITE);
