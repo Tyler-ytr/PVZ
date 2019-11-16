@@ -26,6 +26,7 @@
 #define coldblue        75
 #define plantcolor      28
 #define zombiecolor     106
+#define ironcolor       103
 
 using namespace std;
 

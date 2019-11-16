@@ -14,13 +14,15 @@ extern int score;
 class plant;
 enum Plant_type{
     peashotter=0,
-    sunflower=1,
+    Sunflower=1,
     coldshotter=2,
     cherry_bomb=3
 
 };
 enum Zombie_type{
     normal_zombie=0,
+    iron_zombie=1,
+    roadblock_zombie=2
 };
 
 
@@ -46,8 +48,8 @@ public:
     int by;
     pea_bullet(int bx,int by,int frozen,int speed,int attack_power);
 
-    void move();
-    void work(class zombie &Z);
+    virtual void  move();
+    virtual void work(class zombie &Z);
     void timepassing(){
         t+=1;
     }
@@ -55,6 +57,13 @@ public:
     void death();
 
 
+};
+class cold_bullet:public pea_bullet{
+public:
+    cold_bullet(int bx,int by,int frozen,int speed,int attack_power);
+    virtual void move();
+    virtual void work(class zombie&Z);
+    virtual void draw();
 };
 class plant{
 protected:
@@ -74,6 +83,7 @@ public:
     int Ready;//0:waiting 1:ready
     int alive;//活着为1,死了为0;
     int cost;
+    int sun_catch;
     plant() {
         ;
     }
@@ -86,6 +96,7 @@ public:
         t+=1;
     };
     virtual void death();
+    bool check_location(int x,int y);
 
 
 
@@ -103,14 +114,22 @@ public:
 
 };
 
-//class sunflower:public plant{
-//public:
-//    sunflower(int X,int Y,int ID);
-//    virtual void draw();
-//    virtual int work(class zombie&Z);
-//    virtual void death();
-//
-//};
+class sunflower:public plant{
+public:
+
+    sunflower(int X,int Y,int ID);
+    virtual void draw();
+    virtual int work(class zombie&Z);
+    virtual void death();
+
+};
+class coldshooter:public peashooter{
+public:
+    coldshooter(int X,int Y,int ID);
+    virtual void draw();
+    virtual int work(class zombie&Z);
+    virtual void death();
+};
 class zombie{
 protected:
     int x;
@@ -132,12 +151,13 @@ public:
     int bx;
     int by;
     zombie(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID,int attack_power,int attack_speed,int score);
-    void  draw();
+    virtual void  draw();
     void death();
     void hurt(int attack_power);
 
     virtual void move();
     virtual int work(class plant& P);
+    void freeze();
     void timepassing(){
         t+=1;
     }
@@ -153,6 +173,41 @@ public:
 
 
 };
+class Iron_zombie:public zombie{
+private:
+    int iron;
+public:
+    Iron_zombie(int X,int Y,int ID);
+    void move(){
+        zombie::move();
+    }
+    void draw() override;
+    int work(class plant& P){
+        zombie::work(P);
+        if(hp<=100){
+            iron=0;
+        }
+    };
+
+};
+class Roadblock_zombie:public zombie{
+private:
+    int roadblock;
+public:
+    Roadblock_zombie(int X,int Y,int ID);
+    void move(){
+        zombie::move();
+    }
+    void draw() override;
+    int work(class plant& P){
+        zombie::work(P);
+        if(hp<=100){
+            roadblock=0;
+        }
+    };
+
+};
+
 
 
 
@@ -188,6 +243,8 @@ public:
     void both_move();
     void plant_flowers_test(int x, int y);
     int check_win();
+    void sun_catch(int x,int y);
+    void delete_plant(int x,int y);
 
 
     //辅助函数:

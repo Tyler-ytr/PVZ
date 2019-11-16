@@ -89,8 +89,9 @@ int Game::play() {
     c1.zombie_productor(6, 1, normal_zombie);
     c1.zombie_productor(7, 1, normal_zombie);
     c1.zombie_productor(5, 1, normal_zombie);
-    c1.zombie_productor(4, 1, normal_zombie);
-
+    c1.zombie_productor(9, 2, iron_zombie);
+    c1.zombie_productor(8, 2, roadblock_zombie);
+    c1.plant_flowers_test(0, 2);
     c1.map_init();
     drawRect(0 * RectW, 0 * RectH, RectW, RectH, LIGHTGRAY);
 
@@ -140,6 +141,13 @@ int Game::play() {
                 case 110:
                     c1.plant_flowers(x, y);
                     break;//n 种植
+                case 104:{
+                    c1.sun_catch(x,y);//h 收货阳光
+                    break;
+                }
+                case 106:{
+                    c1.delete_plant(x,y);break;//j 铲除植物
+                }
                 case 27:
                     stop = 1;
                     break;//结束游戏
