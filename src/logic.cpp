@@ -85,6 +85,7 @@ void controller::plant_group_work() {
     for (vector<class plant *>::iterator temp_plant = plant_group.begin(); temp_plant != plant_group.end();) {
         if ((*temp_plant)->alive == 0) {
             itor2 = temp_plant;
+            (*temp_plant)->death();
             plant_group.erase(itor2);
         } else {
             int flag=0;
@@ -134,6 +135,7 @@ void controller::bullet_group_work() {
          temp_bullet != bullet_group.end();) {
         if ((*temp_bullet)->alive == 0) {
             itor2 = temp_bullet;
+            (*temp_bullet)->death();
             bullet_group.erase(itor2);
 
         } else {
@@ -155,6 +157,7 @@ void controller::zombie_group_work() {
         if ((*temp_zombie)->alive == 0) {
             (*temp_zombie)->death();
             itor2 = temp_zombie;
+            (*temp_zombie)->death();
             zombie_group.erase(itor2);
 
         } else {
@@ -212,9 +215,10 @@ void controller::both_draw() {
     ;
 }
 void controller::both_work() {
+    zombie_group_work();
     bullet_group_work();
     plant_group_work();
-    zombie_group_work();
+ //   zombie_group_work();
 }
 void controller::both_move(){
     for(auto temp_bullet=bullet_group.begin();temp_bullet!=bullet_group.end();temp_bullet++){

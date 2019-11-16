@@ -79,6 +79,7 @@ int Game::play() {
     c1.zombie_productor(6,1,normal_zombie);
     c1.zombie_productor(7,1,normal_zombie);
     c1.zombie_productor(5,1,normal_zombie);
+    c1.zombie_productor(4,1,normal_zombie);
 
 //    peashooter temp3(0,3,5);
 //    zombie temp1(7,1,100,"Normal_zombie",5,1,1,20);
