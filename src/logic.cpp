@@ -8,6 +8,10 @@
 //int t=0;
 //int score=0;
 
+void check_exist(){
+    drawPixel(15,15,RED);
+}
+
 controller::controller() {
     t = 0;
     score = 0;
@@ -56,6 +60,13 @@ void controller::plant_flowers(int x, int y) {
     plant_catch = -1;
 
 }
+void controller::plant_flowers_test(int x, int y) {
+    class plant *temp_plant;
+    temp_plant = new peashooter(x, y, ID);
+    ID += 1;
+    plant_group.push_back(temp_plant);
+
+}
 
 void controller::zombie_productor(int x, int y, int type) {
     class zombie *temp_zombie;
@@ -76,6 +87,7 @@ void controller::plant_group_work() {
             itor2 = temp_plant;
             plant_group.erase(itor2);
         } else {
+            int flag=0;
             for (vector<class zombie *>::iterator temp_zombie = zombie_group.begin();
                  temp_zombie != zombie_group.end(); temp_zombie++) {
                 int result = (*temp_plant)->work(*(*temp_zombie));
@@ -84,16 +96,25 @@ void controller::plant_group_work() {
                         break;//对result进行处理;
                     }
                 }
+                flag=1;
 
             }
+            if(flag==0){
+                zombie fake_zombie(-1,-1,-1,"fake",10,-1,-1,-1,20);
+                (*temp_plant)->work(fake_zombie);
+            }
+          //  check_exist();
             switch ((*temp_plant)->type) {//对常态work进行处理
                 case peashotter: {
+                   // check_exist();
                     if ((*temp_plant)->Ready == 1) {
                         int bx = (*temp_plant)->bx;
                         int by = (*temp_plant)->by;
                         class pea_bullet *temp_bullet;
                         temp_bullet = new pea_bullet(bx, by, 0, 3, 20);
                         bullet_group.push_back(temp_bullet);
+                        (*temp_plant)->Ready = 0;
+                   //     check_exist();
                     };
                     break;
                 }
@@ -132,13 +153,20 @@ void controller::zombie_group_work() {
     vector<class zombie *>::iterator itor2;
     for (vector<class zombie *>::iterator temp_zombie = zombie_group.begin(); temp_zombie != zombie_group.end();) {
         if ((*temp_zombie)->alive == 0) {
+            (*temp_zombie)->death();
             itor2 = temp_zombie;
             zombie_group.erase(itor2);
 
         } else {
+            int flag=0;
             for(vector<class plant*>::iterator temp_plant=plant_group.begin();temp_plant!=plant_group.end();temp_plant++){
                 int result=(*temp_zombie)->work(*(*(temp_plant)));
-                if(result==1)break;
+                if(result==1){flag=1;break;}
+            }
+            if(flag==1){
+                (*temp_zombie)->stop=1;
+            }else{
+                (*temp_zombie)->stop=0;
             }
 
 
@@ -149,6 +177,15 @@ void controller::zombie_group_work() {
 
 void controller::time_passing() {
     t += 1;
+    for(auto temp_bullet=bullet_group.begin();temp_bullet!=bullet_group.end();temp_bullet++){
+        (*temp_bullet)->timepassing();
+    }
+    for(auto temp_plant=plant_group.begin();temp_plant!=plant_group.end();temp_plant++){
+        (*temp_plant)->timepassing();
+    }
+    for(auto temp_zombie=zombie_group.begin();temp_zombie!=zombie_group.end();temp_zombie++){
+        (*temp_zombie)->timepassing();
+    }
 }
 
 void controller::add_score(int s) {
@@ -157,6 +194,38 @@ void controller::add_score(int s) {
 
 void controller::information_draw() {
     ;
+}
+
+
+void controller::both_draw() {
+    for(auto temp_bullet=bullet_group.begin();temp_bullet!=bullet_group.end();temp_bullet++){
+       check_exist();
+        (*temp_bullet)->draw();
+    }
+    for(auto temp_plant=plant_group.begin();temp_plant!=plant_group.end();temp_plant++){
+        (*temp_plant)->draw();
+    }
+    for(auto temp_zombie=zombie_group.begin();temp_zombie!=zombie_group.end();temp_zombie++){
+        (*temp_zombie)->draw();
+    }
+
+    ;
+}
+void controller::both_work() {
+    bullet_group_work();
+    plant_group_work();
+    zombie_group_work();
+}
+void controller::both_move(){
+    for(auto temp_bullet=bullet_group.begin();temp_bullet!=bullet_group.end();temp_bullet++){
+        //  check_exist();
+        (*temp_bullet)->move();
+
+    }
+    for(auto temp_zombie=zombie_group.begin();temp_zombie!=zombie_group.end();temp_zombie++){
+
+        (*temp_zombie)->move();
+    }
 }
 ////
 ////
@@ -177,6 +246,7 @@ plant::plant(int X, int Y, int Hp, std::string Name, int speed, int Type, int ID
     //waiting for changing
     bx = x;
     by = y;//
+    alive=1;
     this->t = 0;
 
 }
@@ -245,36 +315,54 @@ void plant::hurt(int attcak_power) {
     }
 }
 
-void plant::time_passing() {
-    t += 1;
-}
+//void plant::time_passing() {
+//    t += 1;
+//}
 
 ////
 ////
 ////
 ////下面是peashooter
-peashooter::peashooter(int X, int Y, int ID) : plant(X, Y, 100, "peashooter", 5, peashotter, ID) {
+peashooter::peashooter(int X, int Y, int ID) : plant(X, Y, 100, "peashooter", 23, peashotter, ID) {
     bx = plant::x * RectW + 2 + 4;
     by = plant::y * RectH + 3;
 
 };
 
 void peashooter::draw() {
-    ;
+    if(alive==1){
     drawText(bx - 4, by, "豌豆射手", BLACK, plantcolor);
     drawPixel(bx - 4, by + 1, plantcolor);
     drawPixel(bx - 4, by + 2, plantcolor);
     // drawText(bx-5, by+3, "HP:100", RED, plantcolor);
-    drawText_num(bx - 5, by + 3, "HP:", 100, RED, plantcolor);
+        drawLine(bx-5,by+3,4,true,grasscolor);
+    drawText_num(bx - 5, by + 3, "HP:", hp, RED, plantcolor);}
+    else{
+        death();
+    }
 }
 
 int peashooter::work(class zombie &Z) {
+//    check_exist();
+//    if(this->t!=0){
+//        check_exist();
+//    }
     if (t % speed == 0) {
         Ready = 1;
+        check_exist();
         return 1;
     } else {
         return 0;
     }
+}
+void peashooter::death(){
+    drawLine(bx-4,by,4,true,grasscolor);
+  //  drawText(bx - 4, by, "豌豆射手", BLACK, plantcolor);
+    drawPixel(bx - 4, by + 1, grasscolor);
+    drawPixel(bx - 4, by + 2, grasscolor);
+    // drawText(bx-5, by+3, "HP:100", RED, plantcolor);
+   // drawText_num(bx - 5, by + 3, "HP:", 100, RED, plantcolor);
+    drawLine(bx-5,by+3,4,true,grasscolor);
 }
 
 ////
@@ -284,7 +372,7 @@ int peashooter::work(class zombie &Z) {
 //zombie::    zombie(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID){
 //    ;
 //}
-zombie::zombie(int X, int Y, int Hp, std::string Name, int speed, int Type, int ID,int attack_power) {
+zombie::zombie(int X, int Y, int Hp, std::string Name, int speed, int Type, int ID,int attack_power,int attack_speed) {
     x = X;
     y = Y;
     hp = Hp;
@@ -294,8 +382,11 @@ zombie::zombie(int X, int Y, int Hp, std::string Name, int speed, int Type, int 
     alive = 1;
     bx = x * RectW + 2;
     by = y * RectH + 3;
-    t = 0;
+    t = 1;
     frozen = 0;
+    stop=0;
+    this->speed=speed;
+    this->attack_speed=attack_speed;
     this->attack_power=attack_power;
 
 }
@@ -352,15 +443,20 @@ int check_in_attack(int bx, int by, class plant P) {
 
 int zombie::work(class plant &P) {
     if(check_in_attack(bx,by,P)==1) {
-        P.hurt(this->attack_power);return 1;
+        if(t%attack_speed==0){
+        P.hurt(this->attack_power);}return 1;
     }return 0;
 }
 
 void zombie::move() {
+    if(stop==0){
     if (t % speed == 0) {
+        //;stop=1;
         bx -= 1;
-        x = bx / RectW;;
+        x = bx / RectW;
     }
+    }
+//check_exist();
 
     ;
 }
@@ -392,9 +488,10 @@ pea_bullet::pea_bullet(int bx, int by, int frozen, int speed, int attack_power) 
     this->t = 0;
 }
 
+
 void pea_bullet::work(class zombie &Z) {
     if (alive == 1) {
-        if (Z.bx == this->bx + 1) {
+        if (Z.bx == this->bx + 1&&this->by<=Z.by+1&&this->by>=Z.by-3) {
             Z.hurt(attack_power);
             alive = 0;
         };
@@ -404,7 +501,7 @@ void pea_bullet::work(class zombie &Z) {
 
 void pea_bullet::move() {
     if (t % speed == 0) {
-        if (bx <= MAPW) {
+        if (bx < MAPW) {
             bx += 1;
         } else {
             alive = 0;
@@ -417,6 +514,7 @@ void pea_bullet::draw() {
     if (alive == 1) {
         drawPixel(bx - 1, by, grasscolor);
         drawPixel(bx, by, plantcolor);
+     //   drawPixel(bx - 1, by, grasscolor);
     } else {
         death();
     }
@@ -433,6 +531,6 @@ void pea_bullet::death() {
 ////
 ////
 //// 下面是 normal_zombie:
-Normal_zombie::Normal_zombie(int X, int Y, int ID) : zombie(X, Y, 100, "normal zombie", 5, normal_zombie, ID,20) {
+Normal_zombie::Normal_zombie(int X, int Y, int ID) : zombie(X, Y, 100, "normal zombie", 5, normal_zombie, ID,10,25) {
     ;
 };

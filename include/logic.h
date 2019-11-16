@@ -80,9 +80,12 @@ public:
     virtual int work(class zombie &Z);
     virtual void draw();
     void hurt(int attcak_power);
-    void plant_show();
-    void time_passing();
+    static void plant_show();
+    void timepassing(){
+        t+=1;
+    };
     virtual void death();
+
 
 
 };
@@ -95,6 +98,7 @@ public:
     peashooter(int X, int Y, int ID);
     virtual void draw();
     virtual int work(class zombie&Z);
+    virtual void death();
 
 };
 class zombie{
@@ -106,19 +110,22 @@ protected:
     int speed;
     int type;
     int ID;
-    int stop=0;
+    int attack_speed;
+
     int t;
     int frozen;//0是正常的 1是冰冻的;
     int attack_power;
 public:
+    int stop;
     int alive;
     int bx;
     int by;
-    zombie(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID,int attack_power);
+    zombie(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID,int attack_power,int attack_speed);
     void  draw();
     void death();
     void hurt(int attack_power);
-    void move();
+
+    virtual void move();
     virtual int work(class plant& P);
     void timepassing(){
         t+=1;
@@ -129,6 +136,10 @@ public:
 class Normal_zombie:public zombie{
 public:
     Normal_zombie(int X,int Y,int ID);
+    void move(){
+        zombie::move();
+    }
+
 
 };
 
@@ -157,7 +168,10 @@ public:
     void plant_group_work();
     void bullet_group_work();
     void zombie_group_work();
-
+    void both_draw();
+    void both_work();
+    void both_move();
+    void plant_flowers_test(int x, int y);
 
 
 

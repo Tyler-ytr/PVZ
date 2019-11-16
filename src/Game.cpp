@@ -3,6 +3,7 @@
 //
 #include "Game.h"
 #include "linux_env.h"
+//#include "logic.h"
 
 int Game::init() {
     screenClear();
@@ -73,10 +74,15 @@ int Game::play() {
 //    t=0;sun=0;
 //    score=0;
     controller c1;
-    plant temp;
-    peashooter temp3(0,3,5);
-    zombie temp1(7,1,100,"Normal_zombie",5,1,1,20);
-    pea_bullet temp2(0,RectH + 3,0,3,101);
+    c1.plant_flowers_test(0,1);
+  //c1.zombie_productor(4,4,normal_zombie);
+    c1.zombie_productor(6,1,normal_zombie);
+    c1.zombie_productor(7,1,normal_zombie);
+    c1.zombie_productor(5,1,normal_zombie);
+
+//    peashooter temp3(0,3,5);
+//    zombie temp1(7,1,100,"Normal_zombie",5,1,1,20);
+//    pea_bullet temp2(0,RectH + 3,0,3,101);
 
     for (int i = 0; i < RectnumW; i++) {
         for (int j = 0; j < 1; j++) {
@@ -122,7 +128,8 @@ int Game::play() {
 //    drawLine(2, RectH+5, 3, true, RED);
 //    drawLine(2, RectH+6, 3, true, RED);
     //drawText(3, RectH+6,"HP:100", RED, GRAY );
-    temp.plant_show();
+    plant::plant_show();
+
     init_keyboard();
    // kbhit();
     while (1) {
@@ -131,6 +138,10 @@ int Game::play() {
         my_sleep(50);
 
         c1.time_passing();
+       c1.both_move();
+       c1.both_draw();
+       c1.both_work();
+
 //        temp1.timepassing();
 //        temp1.draw();
 //        temp1.move();
@@ -139,7 +150,7 @@ int Game::play() {
 //        temp2.move();
 //        temp2.draw();
 //        temp2.work(temp1);
-    temp3.draw();
+  //  temp3.draw();
 
         if(kbhit()){;
             switch (readch()) {
