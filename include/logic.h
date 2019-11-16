@@ -11,9 +11,13 @@
 extern int sun;//全局的阳光
 extern int t;//全局的时间片
 extern int score;
+class plant;
 enum Plant_type{
     peashotter=0,
     sunflower=1,
+    coldshotter=2,
+    cherry_bomb=3
+
 };
 enum Zombie_type{
     norma_zombie=0,
@@ -22,38 +26,23 @@ enum Zombie_type{
 
 
 
-class controller{
-private:
-    int sun;
-    int t;
-    int score;
 
-public:
-    //int score;
-    std::vector<class zombie> zombie_group;
-    std::vector<class plant> plant_group;
-    controller();
-    void time_passing();
-    void add_score(int s);
-    void information_draw();
-
-
-
-};
 //extern class plant;
 //extern class zombie;
 class pea_bullet{
-private:
+protected:
     int frozen;//正常是0 冰冻为1
-    int bx;// 像素位置
-    int by;
+
     int speed;
     int attack_power;
     int alive;//打了没
     int t;
 
 
+
 public:
+    int bx;// 像素位置
+    int by;
     pea_bullet(int bx,int by,int frozen,int speed,int attack_power);
 
     void move();
@@ -62,11 +51,12 @@ public:
         t+=1;
     }
     virtual void draw();
+    void death();
 
 
 };
 class plant{
-private:
+protected:
     int x;
     int y;
     int hp;
@@ -74,6 +64,7 @@ private:
     int speed;
     int type;
     int ID;
+
 
 public:
     int bx;//像素级别的位置
@@ -96,10 +87,11 @@ class peashooter : public plant{
 
 public:
     peashooter(int X, int Y, int ID);
+    virtual void draw();
 
 };
 class zombie{
-private:
+protected:
     int x;
     int y;
     int hp;
@@ -109,12 +101,13 @@ private:
     int ID;
     int alive;
     int t;
+    int frozen;//0是正常的 1是冰冻的;
 public:
     int bx;
     int by;
     zombie(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID);
     void  draw();
-    void check_alive_draw();
+    void death();
     void hurt(int attack_power);
     void move();
     virtual int work();
@@ -124,10 +117,35 @@ public:
 
 
 };
+class Normal_zombie:public zombie{
+
+};
 
 
 
+class controller{
+private:
+    int sun;
+    int t;
+    int score;
+    int plant_catch;//来自plant_list -1 为空
+    int ID;
 
+public:
+    //int score;
+    std::vector<class zombie*> zombie_group;
+    std::vector<class plant*> plant_group;
+    controller();
+    void time_passing();
+    void add_score(int s);
+    void information_draw();
+    void buy_plant(int x,int y);//购买处于逻辑位x,y的植物;
+    void plant_flowers(int x,int y);//在逻辑位x,y上面种植植物(如果阳光够 否则就不种)(无论如何 都会让plant_catch清除);
+    void zombie_productor(int x,int y,int type);//在逻辑位x,y上面"生产"僵尸;
+
+
+
+};
 
 
 

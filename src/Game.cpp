@@ -17,7 +17,7 @@ int Game::init() {
     init_keyboard();
     int state = 100;
     while (1) {
-        kbhit();
+        if(kbhit()){
         switch (readch()) {
             case 119:
                 state += 1;
@@ -36,7 +36,7 @@ int Game::init() {
                 }
             default:
                 break;
-        }
+        }}
         if (state % 2 == 0) {
             drawTextB(18, 17, "Start", WHITE, RED);
             drawTextB(18, 20, "Exit", WHITE, BLACK);//Start
@@ -73,9 +73,10 @@ int Game::play() {
 //    t=0;sun=0;
 //    score=0;
     controller c1;
-  //  plant temp;
-    zombie temp1(7,2,100,"Normal_zombie",5,1,1);
-    pea_bullet temp2(0,RectH + 3,0,3,500);
+    plant temp;
+    peashooter temp3(0,3,5);
+    zombie temp1(7,1,100,"Normal_zombie",5,1,1);
+    pea_bullet temp2(0,RectH + 3,0,3,101);
 
     for (int i = 0; i < RectnumW; i++) {
         for (int j = 0; j < 1; j++) {
@@ -121,7 +122,7 @@ int Game::play() {
 //    drawLine(2, RectH+5, 3, true, RED);
 //    drawLine(2, RectH+6, 3, true, RED);
     //drawText(3, RectH+6,"HP:100", RED, GRAY );
-  //  temp.plant_show();
+    temp.plant_show();
     init_keyboard();
    // kbhit();
     while (1) {
@@ -130,12 +131,15 @@ int Game::play() {
         my_sleep(50);
 
         c1.time_passing();
-        temp1.timepassing();
-        temp1.draw();
-        temp1.move();
-        temp2.timepassing();
-        temp2.move();
-        temp2.draw();
+//        temp1.timepassing();
+//        temp1.draw();
+//        temp1.move();
+//
+//        temp2.timepassing();
+//        temp2.move();
+//        temp2.draw();
+//        temp2.work(temp1);
+    temp3.draw();
 
         if(kbhit()){;
             switch (readch()) {
