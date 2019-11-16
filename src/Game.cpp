@@ -75,7 +75,7 @@ int Game::play() {
     controller c1;
     plant temp;
     peashooter temp3(0,3,5);
-    zombie temp1(7,1,100,"Normal_zombie",5,1,1);
+    zombie temp1(7,1,100,"Normal_zombie",5,1,1,20);
     pea_bullet temp2(0,RectH + 3,0,3,101);
 
     for (int i = 0; i < RectnumW; i++) {

@@ -20,7 +20,7 @@ enum Plant_type{
 
 };
 enum Zombie_type{
-    norma_zombie=0,
+    normal_zombie=0,
 };
 
 
@@ -35,12 +35,13 @@ protected:
 
     int speed;
     int attack_power;
-    int alive;//打了没
+
     int t;
 
 
 
 public:
+    int alive;//打了没
     int bx;// 像素位置
     int by;
     pea_bullet(int bx,int by,int frozen,int speed,int attack_power);
@@ -62,11 +63,12 @@ protected:
     int hp;
     std::string name;
     int speed;
-    int type;
+    int t;
     int ID;
 
 
 public:
+    int type;
     int bx;//像素级别的位置
     int by;
     int Ready;//0:waiting 1:ready
@@ -79,6 +81,10 @@ public:
     virtual void draw();
     void hurt(int attcak_power);
     void plant_show();
+    void time_passing();
+    virtual void death();
+
+
 };
 class peashooter : public plant{
 //Hp: 100
@@ -88,6 +94,7 @@ class peashooter : public plant{
 public:
     peashooter(int X, int Y, int ID);
     virtual void draw();
+    virtual int work(class zombie&Z);
 
 };
 class zombie{
@@ -99,18 +106,20 @@ protected:
     int speed;
     int type;
     int ID;
-    int alive;
+    int stop=0;
     int t;
     int frozen;//0是正常的 1是冰冻的;
+    int attack_power;
 public:
+    int alive;
     int bx;
     int by;
-    zombie(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID);
+    zombie(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID,int attack_power);
     void  draw();
     void death();
     void hurt(int attack_power);
     void move();
-    virtual int work();
+    virtual int work(class plant& P);
     void timepassing(){
         t+=1;
     }
@@ -118,6 +127,8 @@ public:
 
 };
 class Normal_zombie:public zombie{
+public:
+    Normal_zombie(int X,int Y,int ID);
 
 };
 
@@ -135,6 +146,7 @@ public:
     //int score;
     std::vector<class zombie*> zombie_group;
     std::vector<class plant*> plant_group;
+    std::vector<class pea_bullet*>bullet_group;
     controller();
     void time_passing();
     void add_score(int s);
@@ -142,6 +154,10 @@ public:
     void buy_plant(int x,int y);//购买处于逻辑位x,y的植物;
     void plant_flowers(int x,int y);//在逻辑位x,y上面种植植物(如果阳光够 否则就不种)(无论如何 都会让plant_catch清除);
     void zombie_productor(int x,int y,int type);//在逻辑位x,y上面"生产"僵尸;
+    void plant_group_work();
+    void bullet_group_work();
+    void zombie_group_work();
+
 
 
 
