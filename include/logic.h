@@ -73,10 +73,11 @@ public:
     int by;
     int Ready;//0:waiting 1:ready
     int alive;//活着为1,死了为0;
+    int cost;
     plant() {
         ;
     }
-    plant(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID);
+    plant(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID,int cost);
     virtual int work(class zombie &Z);
     virtual void draw();
     void hurt(int attcak_power);
@@ -101,6 +102,15 @@ public:
     virtual void death();
 
 };
+
+//class sunflower:public plant{
+//public:
+//    sunflower(int X,int Y,int ID);
+//    virtual void draw();
+//    virtual int work(class zombie&Z);
+//    virtual void death();
+//
+//};
 class zombie{
 protected:
     int x;
@@ -117,10 +127,11 @@ protected:
     int attack_power;
 public:
     int stop;
+    int score;
     int alive;
     int bx;
     int by;
-    zombie(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID,int attack_power,int attack_speed);
+    zombie(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID,int attack_power,int attack_speed,int score);
     void  draw();
     void death();
     void hurt(int attack_power);
@@ -152,6 +163,9 @@ private:
     int score;
     int plant_catch;//来自plant_list -1 为空
     int ID;
+    int natual_sun_speed;
+    int win_lose;//1 正常 0 失败 2 胜利
+
 
 public:
     //int score;
@@ -159,6 +173,7 @@ public:
     std::vector<class plant*> plant_group;
     std::vector<class pea_bullet*>bullet_group;
     controller();
+    static void map_init();
     void time_passing();
     void add_score(int s);
     void information_draw();
@@ -172,6 +187,11 @@ public:
     void both_work();
     void both_move();
     void plant_flowers_test(int x, int y);
+    int check_win();
+
+
+    //辅助函数:
+
 
 
 

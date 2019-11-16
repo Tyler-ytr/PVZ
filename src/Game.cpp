@@ -55,6 +55,11 @@ void Game::test() {
     if (state == 1) {
         printf("start");
         int j = play();
+        if(Game_win==0){
+            printf("Lose");
+        }
+        screenClear();
+
     } else {
         printf("Exit");
     }
@@ -71,6 +76,7 @@ int Game::play() {
     int x = 0;
     int y = 0;//存储坐标系
     int stop=0;
+    int win=0;
 //    t=0;sun=0;
 //    score=0;
     controller c1;
@@ -81,67 +87,23 @@ int Game::play() {
     c1.zombie_productor(5,1,normal_zombie);
     c1.zombie_productor(4,1,normal_zombie);
 
-//    peashooter temp3(0,3,5);
-//    zombie temp1(7,1,100,"Normal_zombie",5,1,1,20);
-//    pea_bullet temp2(0,RectH + 3,0,3,101);
-
-    for (int i = 0; i < RectnumW; i++) {
-        for (int j = 0; j < 1; j++) {
-            drawWholeRect(i * RectW, j * RectH, RectW, RectH, shopcolor);
-               // drawRect(i*RectW,j*RectH,RectW,RectH,LIGHTGRAY);
-            // clearRect(i*RectH+1,j*RectW,RectH-2,RectW-2);
-        }
-    }
-    for (int i = 0; i < RectnumW; i++) {
-        for (int j = 1; j < RectnumH; j++) {
-            drawWholeRect(i * RectW, j * RectH, RectW, RectH, grasscolor);
-          //     drawRect(i*RectW,j*RectH,RectW,RectH,LIGHTGRAY);
-            // clearRect(i*RectH+1,j*RectW,RectH-2,RectW-2);
-        }
-    }
-    for (int i = 0; i < RectnumW; i++) {
-        for (int j = 0; j < 1; j++) {
-            drawdefence2(i*RectW,j*RectH,RectH,WHITE,shopcolor);
-        }
-    }
+    c1.map_init();
     drawRect(0*RectW,0*RectH,RectW,RectH,LIGHTGRAY);
-   // drawdefence2(0,0,6,BLACK,RED);
-//    for(int i=0;i<RectnumW;i++){
-//        for(int j=1;j<RectnumH;j++){
-//            drawdefence(i*6,j*6,6,WHITE,grasscolor);
-//        }
-//    }
-//for(int i=0;i<5;i++){
-//    for(int j=0;j<5;j++){
-//        drawText(i*RectW+2, j*RectH+3,"豌豆射手", BLACK, plantcolor);
-//        drawPixel(i*RectW+2, j*RectH+4 ,plantcolor);
-//        drawPixel(i*RectW+2, j*RectH+5 ,plantcolor);
-//        drawText(i*RectW+1, j*RectH+6,"HP:100", RED, plantcolor);
-//    }
-//}
-//    drawPixel(4, RectH+2 ,ORANGE);
-//    drawText(3, RectH+3,"向日葵", BLACK, ORANGE);
-//    drawPixel(4, RectH+4 ,ORANGE);
-//    drawPixel(4, RectH+5 ,plantcolor);
-//    drawText(3, RectH+6,"HP:100", RED, plantcolor);
-//    drawLine(2, RectH+3, 3, true, BLACK);
-//    drawPixel(3, RectH+4 ,plantcolor);
-//    drawLine(2, RectH+5, 3, true, RED);
-//    drawLine(2, RectH+6, 3, true, RED);
-    //drawText(3, RectH+6,"HP:100", RED, GRAY );
+
     plant::plant_show();
 
     init_keyboard();
    // kbhit();
     while (1) {
-//a: 97  d:100;
-//w:119 s:115
-        my_sleep(50);
 
+        my_sleep(50);
         c1.time_passing();
-       c1.both_move();
-       c1.both_draw();
-       c1.both_work();
+        c1.both_move();
+        c1.both_draw();
+        c1.both_work();
+        drawdefence((RectnumW)*RectW,RectH,RectH*5,WHITE,grasscolor);
+        c1.information_draw();
+        win=c1.check_win();
 
 //        temp1.timepassing();
 //        temp1.draw();
@@ -152,7 +114,8 @@ int Game::play() {
 //        temp2.draw();
 //        temp2.work(temp1);
   //  temp3.draw();
-
+//a: 97  d:100;
+//w:119 s:115
         if(kbhit()){;
             switch (readch()) {
                 case 119://w
@@ -167,6 +130,8 @@ int Game::play() {
                 case 100://d
                     if (x + 1 < RectnumW)x = x + 1;
                     break;
+                case 98:c1.buy_plant(x,y);break;//b 购买
+                case 110:c1.plant_flowers(x,y);break;//n 种植
                 case 27:stop=1;break;//结束游戏
                 default:
                     break;
@@ -193,8 +158,18 @@ int Game::play() {
           //  close_keyboard();
             break;
         }
+        if(win==0){
+            break;
+        }
     }
     close_keyboard();
+    if(win==0){
+        Game_win=0;
+        return 0;
+    }else{
+        Game_win=1;
+        return 1;
+    }
 
 
 }

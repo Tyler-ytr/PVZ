@@ -9,11 +9,13 @@ class Game{
 private:
     int button;
     int result;//记录分数
+    int Game_win;
 
 public:
     Game(){
         button=0;
         result=0;
+        Game_win=1;
     }
     int init();//初始化屏幕 有Start Exit 按enter键w s上下移动 enter键选择
     //可能还可以做一个选关界面

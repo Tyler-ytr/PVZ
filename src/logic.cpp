@@ -8,9 +8,9 @@
 //int t=0;
 //int score=0;
 
-void check_exist(){
-    drawPixel(15,15,RED);
-}
+//void check_exist(){
+//    drawPixel(15,15,RED);
+//}
 
 controller::controller() {
     t = 0;
@@ -18,19 +18,37 @@ controller::controller() {
     sun = 0;
     plant_catch = -1;
     ID = 0;
+    natual_sun_speed=30;
+    win_lose=1;
+}
+void cannot_buy(){
+    drawLine(RectnumW*RectW,3,RectW,true,WHITE);
+    drawText(RectnumW*RectW+1,3,"Not enough sun",BLACK,WHITE);;
+}
+void can_buy(){
+    drawLine(RectnumW*RectW,3,RectW,true,WHITE);
+    drawText(RectnumW*RectW+1,3,"Buy it!",BLACK,WHITE);;
 }
 
 void controller::buy_plant(int x, int y) {
     if (y == 0) {
         switch (x) {
             case 0:
+
                 plant_catch = coldshotter;
                 break;
             case 1:
                 plant_catch = sunflower;
                 break;
             case 2:
+                if(sun>=100){
                 plant_catch = peashotter;
+                sun-=100;
+                can_buy();
+                }
+                else{
+                   cannot_buy();
+                }
                 break;
             case 3:
                 plant_catch = cherry_bomb;
@@ -101,7 +119,7 @@ void controller::plant_group_work() {
 
             }
             if(flag==0){
-                zombie fake_zombie(-1,-1,-1,"fake",10,-1,-1,-1,20);
+                zombie fake_zombie(-1,-1,-1,"fake",10,-1,-1,-1,20,-1);
                 (*temp_plant)->work(fake_zombie);
             }
           //  check_exist();
@@ -157,7 +175,9 @@ void controller::zombie_group_work() {
         if ((*temp_zombie)->alive == 0) {
             (*temp_zombie)->death();
             itor2 = temp_zombie;
-            (*temp_zombie)->death();
+            //add_score((*temp_zombie)->score);
+            score+=(*temp_zombie)->score;
+           // (*temp_zombie)->death();
             zombie_group.erase(itor2);
 
         } else {
@@ -189,6 +209,9 @@ void controller::time_passing() {
     for(auto temp_zombie=zombie_group.begin();temp_zombie!=zombie_group.end();temp_zombie++){
         (*temp_zombie)->timepassing();
     }
+    if(t%natual_sun_speed==0){
+        sun+=25;
+    }
 }
 
 void controller::add_score(int s) {
@@ -196,13 +219,20 @@ void controller::add_score(int s) {
 }
 
 void controller::information_draw() {
+    //drawWholeRect(RectnumW*RectW,0,RectH,RectW,WHITE);
+    drawLine(RectnumW*RectW,1,RectW,true,WHITE);
+    drawLine(RectnumW*RectW,2,RectW,true,WHITE);
+    drawText_num(RectnumW*RectW+1,1,"sun:",sun,BLACK,WHITE);
+    drawText_num(RectnumW*RectW+1,2,"score:",score,BLACK,WHITE);
+ //   drawText(RectnumW*RectW+1,3,"Not enough sun",BLACK,WHITE);
+    drawText(RectnumW*RectW+1,4,"You are dead!",BLACK,WHITE);
     ;
 }
 
 
 void controller::both_draw() {
     for(auto temp_bullet=bullet_group.begin();temp_bullet!=bullet_group.end();temp_bullet++){
-       check_exist();
+  //     check_exist();
         (*temp_bullet)->draw();
     }
     for(auto temp_plant=plant_group.begin();temp_plant!=plant_group.end();temp_plant++){
@@ -231,6 +261,44 @@ void controller::both_move(){
         (*temp_zombie)->move();
     }
 }
+void controller::map_init() {
+    for (int i = 0; i < RectnumW; i++) {
+        for (int j = 0; j < 1; j++) {
+            drawWholeRect(i * RectW, j * RectH, RectW, RectH, shopcolor);
+            // drawRect(i*RectW,j*RectH,RectW,RectH,LIGHTGRAY);
+            // clearRect(i*RectH+1,j*RectW,RectH-2,RectW-2);
+        }
+    }
+    for (int i = 0; i < RectnumW+1; i++) {
+        for (int j = 1; j < RectnumH; j++) {
+            drawWholeRect(i * RectW, j * RectH, RectW, RectH, grasscolor);
+            //     drawRect(i*RectW,j*RectH,RectW,RectH,LIGHTGRAY);
+            // clearRect(i*RectH+1,j*RectW,RectH-2,RectW-2);
+        }
+    }
+    for (int i = 0; i < RectnumW; i++) {
+        for (int j = 0; j < 1; j++) {
+            drawdefence2(i*RectW,j*RectH,RectH,WHITE,shopcolor);
+        }
+    }
+    drawWholeRect(RectnumW*RectW,0,RectH,RectW,WHITE);
+//    for(int i=0;i<RectnumW;i++){
+//        drawWholeRect(i * RectW, RectnumH* RectH, RectW, RectH, WHITE);
+//    }
+  //  drawdefence((RectnumW)*RectW,RectH,RectH*5,WHITE,grasscolor);
+}
+
+int controller::check_win() {
+    for(auto temp_zombie=zombie_group.begin();temp_zombie!=zombie_group.end();temp_zombie++){
+
+        if((*temp_zombie)->bx<=0){
+            win_lose=0;
+            return 0;
+        }
+    }
+    return 1;
+
+}
 ////
 ////
 ////
@@ -238,7 +306,7 @@ void controller::both_move(){
 
 
 
-plant::plant(int X, int Y, int Hp, std::string Name, int speed, int Type, int ID) {
+plant::plant(int X, int Y, int Hp, std::string Name, int speed, int Type, int ID,int cost) {
     x = X;
     y = Y;
     hp = Hp;
@@ -252,8 +320,10 @@ plant::plant(int X, int Y, int Hp, std::string Name, int speed, int Type, int ID
     by = y;//
     alive=1;
     this->t = 0;
+    this->cost=cost;
 
 }
+
 
 int plant::work(class zombie &Z) {
     // printf("OKOKOKOKOKOKOK!!!");
@@ -327,7 +397,7 @@ void plant::hurt(int attcak_power) {
 ////
 ////
 ////下面是peashooter
-peashooter::peashooter(int X, int Y, int ID) : plant(X, Y, 100, "peashooter", 23, peashotter, ID) {
+peashooter::peashooter(int X, int Y, int ID) : plant(X, Y, 100, "peashooter", 23, peashotter, ID,100) {
     bx = plant::x * RectW + 2 + 4;
     by = plant::y * RectH + 3;
 
@@ -353,7 +423,7 @@ int peashooter::work(class zombie &Z) {
 //    }
     if (t % speed == 0) {
         Ready = 1;
-        check_exist();
+      //  check_exist();
         return 1;
     } else {
         return 0;
@@ -368,6 +438,12 @@ void peashooter::death(){
    // drawText_num(bx - 5, by + 3, "HP:", 100, RED, plantcolor);
     drawLine(bx-5,by+3,4,true,grasscolor);
 }
+////
+////
+////
+////下面是sunflower
+
+
 
 ////
 ////
@@ -376,7 +452,7 @@ void peashooter::death(){
 //zombie::    zombie(int X, int Y, int Hp, std::string Name,int speed, int Type, int ID){
 //    ;
 //}
-zombie::zombie(int X, int Y, int Hp, std::string Name, int speed, int Type, int ID,int attack_power,int attack_speed) {
+zombie::zombie(int X, int Y, int Hp, std::string Name, int speed, int Type, int ID,int attack_power,int attack_speed,int score) {
     x = X;
     y = Y;
     hp = Hp;
@@ -392,6 +468,7 @@ zombie::zombie(int X, int Y, int Hp, std::string Name, int speed, int Type, int 
     this->speed=speed;
     this->attack_speed=attack_speed;
     this->attack_power=attack_power;
+    this->score=score;
 
 }
 
@@ -406,7 +483,7 @@ void zombie::draw() {
 //    drawText(x*RectW+3, y*RectH+6,"HP:100", RED, GRAY );
 //僵尸模板如上：
     if (alive == 1) {
-        if (bx + 4 <= MAPW) {
+        if (bx + 4 <= MAPW+RectW) {
             int cx = bx + 1;
             drawPixel(cx + 2, by - 1, grasscolor);
             drawLine(cx, by, 4, true, grasscolor);
@@ -438,7 +515,7 @@ void zombie::hurt(int attcak_power) {
 
 int check_in_attack(int bx, int by, class plant P) {
     if (by <= P.by + 1 && by >= P.by - 3) {
-        if (bx <= P.bx + 1 && bx >= -5) {
+        if (bx <= P.bx + 1 && bx >= P.bx-5) {
         return 1;
         }
     }
@@ -460,7 +537,7 @@ void zombie::move() {
         x = bx / RectW;
     }
     }
-//check_exist();
+
 
     ;
 }
@@ -535,6 +612,8 @@ void pea_bullet::death() {
 ////
 ////
 //// 下面是 normal_zombie:
-Normal_zombie::Normal_zombie(int X, int Y, int ID) : zombie(X, Y, 100, "normal zombie", 5, normal_zombie, ID,10,25) {
+Normal_zombie::Normal_zombie(int X, int Y, int ID) : zombie(X, Y, 100, "normal zombie", 5, normal_zombie, ID,10,25,25) {
     ;
 };
+
+
