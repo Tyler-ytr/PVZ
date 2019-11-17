@@ -142,24 +142,14 @@ int Game::play() {
     int y = 0;//存储坐标系
     int stop = 0;
     int win = 0;
-//    t=0;sun=0;
-//    score=0;
     controller c1;
     c1.plant_flowers_test(0, 1);
-    //c1.zombie_productor(4,4,normal_zombie);
-    //c1.zombie_productor(6, 2, normal_zombie);
-   // c1.zombie_productor(7, 2, normal_zombie);
-  //  c1.zombie_productor(5, 2, normal_zombie);
-   // c1.zombie_productor(7, 1, reading_zombie);
-    //c1.zombie_productor(8, 2, roadblock_zombie);
- //   c1.plant_flowers_test(0, 2);
     c1.map_init();
     drawRect(0 * RectW, 0 * RectH, RectW, RectH, LIGHTGRAY);
 
     plant::plant_show();
 
     init_keyboard();
-    // kbhit();
     while (1) {
 
         my_sleep(50);
@@ -172,15 +162,6 @@ int Game::play() {
         c1.information_draw();
         win = c1.check_win();
 
-//        temp1.timepassing();
-//        temp1.draw();
-//        temp1.move();
-//
-//        temp2.timepassing();
-//        temp2.move();
-//        temp2.draw();
-//        temp2.work(temp1);
-        //  temp3.draw();
 //a: 97  d:100;
 //w:119 s:115
         if (kbhit()) { ;

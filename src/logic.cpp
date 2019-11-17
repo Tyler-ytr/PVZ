@@ -347,7 +347,7 @@ void controller::information_draw() {
     drawText_num(RectnumW * RectW + 1, 1, "sun:", sun, BLACK, WHITE);
     drawText_num(RectnumW * RectW + 1, 2, "score:", score, BLACK, WHITE);
     //   drawText(RectnumW*RectW+1,3,"Not enough sun",BLACK,WHITE);
-    drawText(RectnumW * RectW + 1, 4, "You are dead!", BLACK, WHITE);;
+    drawText(RectnumW * RectW + 1, 4, "You are alive!", BLACK, WHITE);;
 }
 
 
@@ -440,14 +440,16 @@ void controller::sun_catch(int x, int y) {
 void controller::delete_plant(int x, int y) {
     //vector<class plant *>::iterator itor2;
     //check_exist();
-    for (vector<class plant *>::iterator temp_plant = plant_group.begin(); temp_plant != plant_group.end();) {
+    for (vector<class plant *>::iterator temp_plant = plant_group.begin(); temp_plant != plant_group.end();temp_plant++) {
         if ((*temp_plant)->check_location(x, y)) {
-            (*temp_plant)->hurt(500);
+;
+            (*temp_plant)->hurt(300);
             break;
         }
 
 
-    }
+    };
+;
 }
 
 void controller::zombie_fram() {
