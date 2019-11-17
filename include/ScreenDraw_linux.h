@@ -27,6 +27,7 @@
 #define plantcolor      28
 #define zombiecolor     106
 #define ironcolor       103
+#define nutcolor        58
 
 using namespace std;
 

@@ -12,9 +12,10 @@ int Game::init() {
             drawWholeRect(i * RectW, j * RectH, RectW, RectH, GRAY);
         }
     }
-    drawTextB(16, 4, "Plant VS Zombie", WHITE, BLACK);
-    drawTextB(18, 17, "Start", WHITE, BLACK);
-    drawTextB(18, 20, "Exit", WHITE, BLACK);
+    drawTextB(23, 4, "Plant VS Zombie ", WHITE, BLACK);
+    drawText(24, 13, "殷天润 制作 ", WHITE, BLACK);
+    drawTextB(25, 17, "Start", WHITE, BLACK);
+    drawTextB(25, 20, "Exit", WHITE, BLACK);
     init_keyboard();
     int state = 100;
     while (1) {
@@ -40,30 +41,90 @@ int Game::init() {
             }
         }
         if (state % 2 == 0) {
-            drawTextB(18, 17, "Start", WHITE, RED);
-            drawTextB(18, 20, "Exit", WHITE, BLACK);//Start
+            drawTextB(25, 17, "Start", WHITE, RED);
+            drawTextB(25, 20, "Exit", WHITE, BLACK);//Start
         } else {
-            drawTextB(18, 17, "Start", WHITE, BLACK);
-            drawTextB(18, 20, "Exit", WHITE, RED);//Exit
+            drawTextB(25, 17, "Start", WHITE, BLACK);
+            drawTextB(25, 20, "Exit", WHITE, RED);//Exit
         }
 
     }
     // close_keyboard();
 }
+int Game::failure(){
+    ;   screenClear();
+    for (int i = 0; i < RectnumW; i++) {
+        for (int j = 0; j < RectnumH; j++) {
+            drawWholeRect(i * RectW, j * RectH, RectW, RectH, GRAY);
+        }
+    }
+    drawTextB(23, 4, "Plant VS Zombie", WHITE, BLACK);
+    drawTextB(20, 7, "THE ZOMBIES ATE YOUR BRAINS!!!", WHITE, BLACK);
+    drawText_num(23, 10, "Your score is ",result, WHITE, BLACK);
+    drawText(23, 13, "殷天润 制作 ", WHITE, BLACK);
+    drawTextB(25, 17, "Restart", WHITE, BLACK);
+    drawTextB(25, 20, "Exit", WHITE, BLACK);
+    init_keyboard();
+    int state = 100;
+    while (1) {
+        if (kbhit()) {
+            switch (readch()) {
+                case 119:
+                    state += 1;
+                    break;
+                case 115:
+                    state -= 1;
+                    break;
+                case 10:
+                    if (state % 2 == 0) {
+                        close_keyboard();
+                        return 1;
+                    }//Start}
+                    else {
+                        close_keyboard();
+                        return 0;//Exit
+                    }
+                default:
+                    break;
+            }
+        }
+        if (state % 2 == 0) {
+            drawTextB(25, 17, "Restart", WHITE, RED);
+            drawTextB(25, 20, "Exit", WHITE, BLACK);//Start
+        } else {
+            drawTextB(25, 17, "Restart", WHITE, BLACK);
+            drawTextB(25, 20, "Exit", WHITE, RED);//Exit
+        }
+
+    }
+}
 
 void Game::test() {
     int state = init();
+    while(1){
+  //  int state = init();
     if (state == 1) {
-        printf("start");
+     //   printf("start");
         int j = play();
         if (Game_win == 0) {
-            printf("Lose");
+            int breakornot=failure();
+            if(breakornot==0){
+                screenClear();
+                printf("Exit");
+                break;
+            }
+
+       ;//     printf("Lose");
         }
         screenClear();
 
-    } else {
+    } else {screenClear();
         printf("Exit");
+        break;
     }
+
+    }
+  //  screenClear();
 }
 
 int check_shop(int x, int y) {
@@ -86,12 +147,12 @@ int Game::play() {
     controller c1;
     c1.plant_flowers_test(0, 1);
     //c1.zombie_productor(4,4,normal_zombie);
-    c1.zombie_productor(6, 1, normal_zombie);
-    c1.zombie_productor(7, 1, normal_zombie);
-    c1.zombie_productor(5, 1, normal_zombie);
-    c1.zombie_productor(9, 2, iron_zombie);
-    c1.zombie_productor(8, 2, roadblock_zombie);
-    c1.plant_flowers_test(0, 2);
+    //c1.zombie_productor(6, 2, normal_zombie);
+   // c1.zombie_productor(7, 2, normal_zombie);
+  //  c1.zombie_productor(5, 2, normal_zombie);
+   // c1.zombie_productor(7, 1, reading_zombie);
+    //c1.zombie_productor(8, 2, roadblock_zombie);
+ //   c1.plant_flowers_test(0, 2);
     c1.map_init();
     drawRect(0 * RectW, 0 * RectH, RectW, RectH, LIGHTGRAY);
 
@@ -103,6 +164,7 @@ int Game::play() {
 
         my_sleep(50);
         c1.time_passing();
+        c1.zombie_fram();
         c1.both_move();
         c1.both_draw();
         c1.both_work();
@@ -183,9 +245,11 @@ int Game::play() {
     }
     close_keyboard();
     if (win == 0) {
+       result= c1.return_score();
         Game_win = 0;
         return 0;
     } else {
+       result= c1.return_score();
         Game_win = 1;
         return 1;
     }

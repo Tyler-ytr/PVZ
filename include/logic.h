@@ -16,16 +16,17 @@ enum Plant_type{
     peashotter=0,
     Sunflower=1,
     coldshotter=2,
-    cherry_bomb=3
+    Cherry_bomb=3,
+    Nut_wall=4
 
 };
 enum Zombie_type{
     normal_zombie=0,
-    iron_zombie=1,
-    roadblock_zombie=2
+    iron_zombie=2,
+    roadblock_zombie=1,
+    reading_zombie=3
+
 };
-
-
 
 
 
@@ -39,7 +40,6 @@ protected:
     int attack_power;
 
     int t;
-
 
 
 public:
@@ -67,8 +67,8 @@ public:
 };
 class plant{
 protected:
-    int x;
-    int y;
+//    int x;
+//    int y;
     int hp;
     std::string name;
     int speed;
@@ -77,6 +77,8 @@ protected:
 
 
 public:
+    int x;
+    int y;
     int type;
     int bx;//像素级别的位置
     int by;
@@ -118,22 +120,41 @@ class sunflower:public plant{
 public:
 
     sunflower(int X,int Y,int ID);
-    virtual void draw();
-    virtual int work(class zombie&Z);
-    virtual void death();
+    void draw() override;
+    int work(class zombie&Z) override;
+    void death() override;
 
 };
 class coldshooter:public peashooter{
 public:
     coldshooter(int X,int Y,int ID);
+    void draw() override;
+    int work(class zombie&Z) override;
+    void death() override;
+};
+class cherrybomb:public plant{
+    int bomb;
+    int death_time;
+public:
+    cherrybomb(int X,int Y,int ID);
     virtual void draw();
     virtual int work(class zombie&Z);
-    virtual void death();
+    void death();
+
+
 };
+class nutwall:public plant{
+public:
+    nutwall(int X,int Y,int ID);
+    virtual void draw();
+    virtual  int work(class zombie&Z);
+    void death();
+};
+
+
 class zombie{
 protected:
-    int x;
-    int y;
+
     int hp;
     std::string name;
     int speed;
@@ -145,6 +166,8 @@ protected:
     int frozen;//0是正常的 1是冰冻的;
     int attack_power;
 public:
+    int x;
+    int y;
     int stop;
     int score;
     int alive;
@@ -182,12 +205,7 @@ public:
         zombie::move();
     }
     void draw() override;
-    int work(class plant& P){
-        zombie::work(P);
-        if(hp<=100){
-            iron=0;
-        }
-    };
+    int work(class plant& P) override;
 
 };
 class Roadblock_zombie:public zombie{
@@ -199,15 +217,21 @@ public:
         zombie::move();
     }
     void draw() override;
-    int work(class plant& P){
-        zombie::work(P);
-        if(hp<=100){
-            roadblock=0;
-        }
-    };
+    int work(class plant& P) override ;
 
 };
+class Read_zombie:public zombie{
+private:
+    int reading;
+public:
+    Read_zombie(int X,int Y,int ID);
+    void move(){
+        zombie::move();
+    }
+    void draw()override;
+    int work(class plant&P)override ;
 
+};
 
 
 
@@ -245,6 +269,10 @@ public:
     int check_win();
     void sun_catch(int x,int y);
     void delete_plant(int x,int y);
+    void zombie_fram();
+    int return_score(){
+        return score;
+    };
 
 
     //辅助函数:

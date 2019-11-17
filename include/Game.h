@@ -21,7 +21,7 @@ public:
     //可能还可以做一个选关界面
     int play();//游戏开始！1. 初始化地图  //返回的值 0 脑子没了 1 存活
     void test();
-
+    int failure();
 
 
 

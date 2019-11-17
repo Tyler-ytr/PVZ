@@ -8,9 +8,11 @@
 //int t=0;
 //int score=0;
 
-//void check_exist(){
-//    drawPixel(15,15,RED);
-//}
+void check_exist() {
+    drawPixel(15, 15, RED);
+}
+
+extern void cherry_bomb_draw(int color, int x, int y);
 
 controller::controller() {
     t = 0;
@@ -63,7 +65,23 @@ void controller::buy_plant(int x, int y) {
                 }
                 break;
             case 3:
-                plant_catch = cherry_bomb;
+                if (sun >= 150) {
+                    plant_catch = Cherry_bomb;
+                    sun -= 150;
+                    can_buy();
+                } else {
+                    cannot_buy();
+
+                }
+                break;
+            case 4:
+                if (sun >= 50) {
+                    plant_catch = Nut_wall;
+                    sun -= 50;
+                    can_buy();
+                } else {
+                    cannot_buy();
+                }
                 break;
             default:
                 break;
@@ -74,30 +92,46 @@ void controller::buy_plant(int x, int y) {
 void controller::plant_flowers(int x, int y) {
 
     class plant *temp_plant;
-    if (plant_catch != -1) {
-        switch (plant_catch) {
-            case peashotter:
-                temp_plant = new peashooter(x, y, ID);
-                ID += 1;
-                plant_group.push_back(temp_plant);
-                break;
-            case Sunflower:
-                temp_plant = new sunflower(x, y, ID);
-                ID += 1;
-                plant_group.push_back(temp_plant);
-                break;
-            case coldshotter:
-                temp_plant = new coldshooter(x, y, ID);
-                ID += 1;
-                plant_group.push_back(temp_plant);
-                break;
-            default:
-                break;
+    int flag = 0;
+
+
+        if (plant_catch != -1) {
+            switch (plant_catch) {
+                case peashotter:
+                    temp_plant = new peashooter(x, y, ID);
+                    ID += 1;
+                    plant_group.push_back(temp_plant);
+                    break;
+                case Sunflower:
+                    temp_plant = new sunflower(x, y, ID);
+                    ID += 1;
+                    plant_group.push_back(temp_plant);
+                    break;
+                case coldshotter:
+                    temp_plant = new coldshooter(x, y, ID);
+                    ID += 1;
+                    plant_group.push_back(temp_plant);
+                    break;
+                case Cherry_bomb:
+                    temp_plant = new cherrybomb(x, y, ID);
+                    ID += 1;
+                    plant_group.push_back(temp_plant);
+                    break;
+                case Nut_wall:
+                    temp_plant = new nutwall(x, y, ID);
+                    ID += 1;
+                    plant_group.push_back(temp_plant);
+                    break;
+
+
+                default:
+                    break;
+            }
+
+
         }
+        plant_catch = -1;
 
-
-    }
-    plant_catch = -1;
 
 }
 
@@ -127,6 +161,10 @@ void controller::zombie_productor(int x, int y, int type) {
             ID += 1;
             zombie_group.push_back(temp_zombie);
             break;
+        case reading_zombie:
+            temp_zombie = new Read_zombie(x, y, ID);
+            ID += 1;
+            zombie_group.push_back(temp_zombie);
             break;
     }
 }
@@ -152,6 +190,12 @@ void controller::plant_group_work() {
                         break;
                     }
                     case coldshotter: {
+                        break;
+                    }
+                    case Cherry_bomb: {
+                        break;
+                    }
+                    case Nut_wall: {
                         break;
                     }
                 }
@@ -195,6 +239,16 @@ void controller::plant_group_work() {
                     }
                     break;
                 }
+                case Cherry_bomb:
+                    if ((*temp_plant)->Ready == 1) {
+                        int tempx = (*temp_plant)->x;
+                        int tempy = (*temp_plant)->y;
+
+                        cherry_bomb_draw(BLACK, tempx, tempy);
+                    }
+                    break;
+                case Nut_wall:
+                    break;
 
             }
 
@@ -241,6 +295,7 @@ void controller::zombie_group_work() {
 
         } else {
             int flag = 0;
+            flag = 0;
             for (vector<class plant *>::iterator temp_plant = plant_group.begin();
                  temp_plant != plant_group.end(); temp_plant++) {
                 int result = (*temp_zombie)->work(*(*(temp_plant)));
@@ -250,9 +305,13 @@ void controller::zombie_group_work() {
                 }
             }
             if (flag == 1) {
+                //
+                //  check_exist();
                 (*temp_zombie)->stop = 1;
+                flag = 0;
             } else {
                 (*temp_zombie)->stop = 0;
+                flag = 0;
             }
 
 
@@ -327,6 +386,7 @@ void controller::both_move() {
 }
 
 void controller::map_init() {
+    srand((unsigned) time(NULL));
     for (int i = 0; i < RectnumW; i++) {
         for (int j = 0; j < 1; j++) {
             drawWholeRect(i * RectW, j * RectH, RectW, RectH, shopcolor);
@@ -371,21 +431,45 @@ void controller::sun_catch(int x, int y) {
         if ((*iter)->check_location(x, y)) {
             temp_plant = *iter;
             sun += temp_plant->sun_catch;
+            temp_plant->sun_catch = 0;
             break;
         }
     }
 }
 
 void controller::delete_plant(int x, int y) {
-    vector<class plant *>::iterator itor2;
+    //vector<class plant *>::iterator itor2;
+    //check_exist();
     for (vector<class plant *>::iterator temp_plant = plant_group.begin(); temp_plant != plant_group.end();) {
         if ((*temp_plant)->check_location(x, y)) {
-            (*temp_plant)->alive = 0;
+            (*temp_plant)->hurt(500);
             break;
         }
 
 
     }
+}
+
+void controller::zombie_fram() {
+
+    if (t < 1000) {
+        if (rand() % 60 == 0) {//生成僵尸
+            int type = rand() % 2;
+            int y = rand() % 5 + 1;
+            zombie_productor(7, y, type);
+
+
+        }
+    } else {
+        if (rand() % 30 == 0) {//生成僵尸
+            int type = rand() % 4;
+            int y = rand() % 5 + 1;
+            zombie_productor(7, y, type);
+        }
+
+
+    }
+
 }
 ////
 ////
@@ -470,6 +554,14 @@ void plant::plant_show() {
     drawLine(3 * RectW + 2, 0 * RectH + 5, 3, true, RED);
     drawText(3 * RectW + 2, 0 * RectH + 5, " Boom!", BLACK, RED);
     drawLine(3 * RectW + 2, 0 * RectH + 6, 3, true, RED);
+    //坚果墙
+    drawText(4 * RectW + 1, 0 * RectH + 1, "坚果墙 :50", BLACK, shopcolor);
+    drawLine(4 * RectW + 2, 0 * RectH + 3, 3, true, nutcolor);
+    drawText(4 * RectW + 2, 0 * RectH + 3, "坚果墙", BLACK, nutcolor);
+    drawLine(4 * RectW + 2, 0 * RectH + 4, 3, true, nutcolor);
+    drawLine(4 * RectW + 2, 0 * RectH + 5, 3, true, nutcolor);
+    drawLine(4 * RectW + 2, 0 * RectH + 6, 3, true, nutcolor);
+    drawText(4 * RectW + 2, 0 * RectH + 6, "HP:300", RED, nutcolor);
 
 
 }
@@ -538,6 +630,85 @@ void peashooter::death() {
     // drawText(bx-5, by+3, "HP:100", RED, plantcolor);
     // drawText_num(bx - 5, by + 3, "HP:", 100, RED, plantcolor);
     drawLine(bx - 5, by + 3, 4, true, grasscolor);
+}
+////
+////
+////
+//// 下面是 cherrybomb
+
+cherrybomb::cherrybomb(int X, int Y, int ID) : plant(X, Y, 1000, "cherrybomb", 5, Cherry_bomb, ID, 150) {
+    ;
+    bomb = 0;
+    death_time = 5;
+    bx = X * RectW + 5;
+    by = Y * RectH + 3;
+}
+
+void cherrybomb::draw() {
+//    drawLine(3 * RectW + 2, 0 * RectH + 3, 3, true, BLACK);
+//    drawPixel(3 * RectW + 3, 0 * RectH + 4, plantcolor);
+//    drawLine(3 * RectW + 2, 0 * RectH + 5, 3, true, RED);
+//    drawText(3 * RectW + 2, 0 * RectH + 5, " Boom!", BLACK, RED);
+//    drawLine(3 * RectW + 2, 0 * RectH + 6, 3, true, RED);
+    ;
+    drawLine(bx - 3, by, 3, true, BLACK);
+    drawPixel(bx - 2, by + 1, plantcolor);
+    drawLine(bx - 3, by + 2, 3, true, RED);
+    drawText(bx - 3, by + 3, " Boom!", BLACK, RED);
+    drawLine(bx - 3, by + 4, 3, true, RED);
+}
+
+void cherrybomb::death() {
+    drawLine(bx - 3, by, 3, true, grasscolor);
+    drawPixel(bx - 2, by + 1, grasscolor);
+    drawLine(bx - 3, by + 2, 3, true, grasscolor);
+    drawLine(bx - 3, by + 3, 3, true, grasscolor);
+    //   drawText(bx-3, by+3, " Boom!", BLACK, RED);
+    drawLine(bx - 3, by + 4, 3, true, grasscolor);
+    cherry_bomb_draw(grasscolor, x, y);
+}
+
+void cherry_bomb_draw(int color, int x, int y) {
+    // drawWholeRect(x)
+    drawWholeRect(x * RectW, y * RectH, RectW, RectH, color);
+    if (x - 1 >= 0) {
+        drawWholeRect((x - 1) * RectW, y * RectH, RectW, RectH, color);
+    }
+    if (x + 1 <= RectnumW) {
+        drawWholeRect((x + 1) * RectW, y * RectH, RectW, RectH, color);
+    }
+    if (y - 1 > 0) {
+        drawWholeRect(x * RectW, (y - 1) * RectH, RectW, RectH, color);
+
+    }
+    if (y != RectnumH - 1) {
+        if (y + 1 < RectnumH) {
+            drawWholeRect(x * RectW, (y + 1) * RectH, RectW, RectH, color);
+        }
+    }
+}
+
+bool cherry_bomb_check(class zombie &Z, int x, int y) {
+    if (Z.x >= x - 1 && Z.x <= x + 1 && Z.y <= y + 1 && Z.y >= y - 1) {
+        return true;
+    }
+    return false;
+}
+
+int cherrybomb::work(class zombie &Z) {
+    if (t % speed == 0) {
+        bomb = 1;
+    }
+    if (bomb == 1) {
+        Ready = 1;
+        death_time -= 1;
+        if (death_time <= 0)alive = 0;
+        if (cherry_bomb_check(Z, x, y)) {
+            Z.hurt(200);
+        }
+    }
+
+
 }
 
 ////
@@ -626,6 +797,43 @@ void sunflower::death() {
     drawLine(bx - 3, by + 3, 4, true, grasscolor);;;
 }
 
+////
+////
+////
+//// 下面是 坚果墙
+nutwall::nutwall(int X, int Y, int ID) : plant(X, Y, 300, "Nut wall", 30, Nut_wall, ID, 50) {
+    bx = X * RectW + 5;
+    by = Y * RectH + 3;//waiting for changing
+
+}
+
+void nutwall::draw() {
+
+    ;
+    if (alive == 1) {
+        // drawText(4 * RectW + 1, 0 * RectH + 1, "坚果墙 :50", BLACK, shopcolor);
+        drawLine(bx - 3, by, 3, true, nutcolor);
+        drawText(bx - 3, by, "坚果墙", BLACK, nutcolor);
+        drawLine(bx - 3, by + 1, 3, true, nutcolor);
+        drawLine(bx - 3, by + 2, 3, true, nutcolor);
+        drawLine(bx - 3, by + 3, 3, true, nutcolor);
+        drawText_num(bx - 3, by + 3, "HP:", hp, RED, nutcolor);
+    } else {
+        death();
+    }
+}
+
+int nutwall::work(struct zombie &Z) {
+    return 1;
+}
+
+void nutwall::death() {
+    drawLine(bx - 3, by, 3, true, grasscolor);
+    drawLine(bx - 3, by + 1, 3, true, grasscolor);
+    drawLine(bx - 3, by + 2, 3, true, grasscolor);
+    drawLine(bx - 3, by + 3, 3, true, grasscolor);
+
+}
 
 ////
 ////
@@ -805,6 +1013,7 @@ void pea_bullet::death() {
     }
 }
 
+
 ////
 ////
 ////
@@ -883,10 +1092,24 @@ void Iron_zombie::draw() {
 
 }
 
+int Iron_zombie::work(class plant &P) {
+    if (hp <= 100) {
+        iron = 0;
+    }
+    if (check_in_attack(bx, by, P) == 1) {
+        if (t % attack_speed == 0) {
+            P.hurt(this->attack_power);
+        }
+        return 1;
+    }
+    return 0;
+
+};
+
 
 Roadblock_zombie::Roadblock_zombie(int X, int Y, int ID) : zombie(X, Y, 200, "roadblock zombie", 5, roadblock_zombie,
                                                                   ID, 10, 25,
-                                                                  50) {
+                                                                  30) {
     this->roadblock = 1;
 }
 
@@ -917,3 +1140,71 @@ void Roadblock_zombie::draw() {
     }
 
 }
+
+int Roadblock_zombie::work(class plant &P) {
+    if (hp <= 100) {
+        roadblock = 0;
+    }
+    if (check_in_attack(bx, by, P) == 1) {
+        if (t % attack_speed == 0) {
+            P.hurt(this->attack_power);
+        }
+        return 1;
+    }
+    return 0;
+}
+
+Read_zombie::Read_zombie(int X, int Y, int ID) : zombie(X, Y, 200, "reading zombie", 7, reading_zombie,
+                                                        ID, 10, 25,
+                                                        30) {
+    ;
+    this->reading = 1;
+}
+
+void Read_zombie::draw() {
+
+    if (alive == 1) {
+        if (bx + 4 <= MAPW + RectW) {
+            int cx = bx + 1;
+            drawPixel(cx + 2, by - 1, grasscolor);
+            drawLine(cx, by, 4, true, grasscolor);
+            //    drawText(cx, by, "普通僵尸", BLACK, zombiecolor);
+            drawPixel(cx + 2, by + 1, grasscolor);
+            drawPixel(cx + 2, by + 2, grasscolor);
+            drawLine(cx + 1, by + 3, 4, true, grasscolor);
+            //     drawText(cx + 1, by + 3, "HP:100", RED, GRAY);
+        }
+        if (reading == 0) { drawText(bx, by, "读", BLACK, zombiecolor); }
+        else {
+            drawText(bx, by, "读", BLACK, WHITE);
+        }
+        drawPixel(bx + 2, by - 1, zombiecolor);
+        //  drawText(bx, by, "读", BLACK, WHITE);
+        drawText(bx + 1, by, "报僵尸", BLACK, zombiecolor);
+        drawPixel(bx + 2, by + 1, RED);
+        drawPixel(bx + 2, by + 2, GRAY);
+        // drawText(bx + 1, by + 3, "HP:100", RED, GRAY);
+        drawText_num(bx + 1, by + 3, "HP:", hp, RED, GRAY);
+    } else {
+        death();
+    }
+
+}
+
+int Read_zombie::work(class plant &P) {
+    if (hp <= 100) {
+        reading = 0;
+        speed = 3;
+    }
+    if (check_in_attack(bx, by, P) == 1) {
+        if (t % attack_speed == 0) {
+            P.hurt(this->attack_power);
+        }
+        return 1;
+    }
+    return 0;
+}
+
+
+
+
